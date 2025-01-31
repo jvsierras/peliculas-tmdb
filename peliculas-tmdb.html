@@ -1,39 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Información de Películas</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    .movie-info {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      max-width: 500px;
-    }
-    .movie-info img {
-      float: left;
-      margin-right: 10px;
-    }
-    .movie-info h2 {
-      margin: 0;
-    }
-  </style>
-</head>
-<body>
-  <h1>Información de Películas</h1>
-  <div id="movie-info-1"></div>
+<script>
+  // Función para obtener datos de la película
+  function fetchMovieData(movieTitle, postId) {
+    const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`;
 
-  <script>
-    // Función para obtener datos de la película
-    function fetchMovieData(movieTitle, postId) {
-      const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`;
+    console.log('URL de la API:', url); // Verifica la URL en la consola
 
-      console.log('URL de la API:', url); // Verifica la URL en la consola
-
-      $.get(url, function(data) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);
         console.log('Respuesta de la API:', data); // Verifica la respuesta en la consola
         if (data.results && data.results.length > 0) {
           const movie = data.results[0];
@@ -47,20 +24,24 @@
               <p><strong>Calificación:</strong> ${movie.vote_average}/10</p>
             </div>
           `;
-          $(`#${postId}`).append(movieInfo);
+          document.getElementById(postId).innerHTML = movieInfo;
         } else {
-          $(`#${postId}`).append('<p>No se encontró información de la película.</p>');
+          document.getElementById(postId).innerHTML = '<p>No se encontró información de la película.</p>';
         }
-      }).fail(function(error) {
-        console.error('Error al conectar con la API:', error);
-        $(`#${postId}`).append('<p>Error al conectar con la API.</p>');
-      });
-    }
+      } else {
+        console.error('Error al conectar con la API:', xhr.statusText);
+        document.getElementById(postId).innerHTML = '<p>Error al conectar con la API.</p>';
+      }
+    };
+    xhr.onerror = function() {
+      console.error('Error de red al buscar la película.');
+      document.getElementById(postId).innerHTML = '<p>Error de red al buscar la película.</p>';
+    };
+    xhr.send();
+  }
 
-    // Llamar a la función al cargar la página
-    $(document).ready(function() {
-      fetchMovieData("TRANSFORMERS", "movie-info-1");
-    });
-  </script>
-</body>
-</html>
+  // Llamar a la función al cargar la página
+  window.onload = function() {
+    fetchMovieData("Inception", "movie-info-1");
+  };
+</script>
