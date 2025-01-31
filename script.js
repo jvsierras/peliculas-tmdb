@@ -8,6 +8,32 @@ const searchInput = document.getElementById('search');
 const reproductor = document.getElementById('reproductor');
 const iframeReproductor = document.getElementById('iframeReproductor');
 
+const puppeteer = require('puppeteer');
+
+async function buscarEnlaceAbyss(titulo) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(`https://abyss.to/search?q=${encodeURIComponent(titulo)}`);
+
+    const enlace = await page.evaluate(() => {
+        const resultado = document.querySelector('.resultado a');
+        return resultado ? resultado.href : null;
+    });
+
+    await browser.close();
+    return enlace;
+}
+
+// Ejemplo de uso
+buscarEnlaceAbyss("Avengers: Endgame").then(enlace => {
+    if (enlace) {
+        console.log("Enlace encontrado:", enlace);
+    } else {
+        console.log("Enlace no disponible.");
+    }
+});
+
+
 function cargarPeliculas(url) {
     fetch(url)
         .then(response => response.json())
