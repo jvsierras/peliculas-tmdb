@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Información de Películas</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .movie-info {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      max-width: 500px;
+    }
+    .movie-info img {
+      float: left;
+      margin-right: 10px;
+    }
+    .movie-info h2 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Información de Películas</h1>
+  <div id="movie-info-1"></div>
+
+  <script>
+    // Función para obtener datos de la película
+    function fetchMovieData(movieTitle, postId) {
+      const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key
+      const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`;
+
+      console.log('URL de la API:', url); // Verifica la URL en la consola
+
+      $.get(url, function(data) {
+        console.log('Respuesta de la API:', data); // Verifica la respuesta en la consola
+        if (data.results && data.results.length > 0) {
+          const movie = data.results[0];
+          const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+          const movieInfo = `
+            <div class="movie-info">
+              <img src="${posterUrl}" alt="${movie.title}" style="max-width: 200px;">
+              <h2>${movie.title}</h2>
+              <p><strong>Fecha de lanzamiento:</strong> ${movie.release_date}</p>
+              <p><strong>Resumen:</strong> ${movie.overview}</p>
+              <p><strong>Calificación:</strong> ${movie.vote_average}/10</p>
+            </div>
+          `;
+          $(`#${postId}`).append(movieInfo);
+        } else {
+          $(`#${postId}`).append('<p>No se encontró información de la película.</p>');
+        }
+      }).fail(function(error) {
+        console.error('Error al conectar con la API:', error);
+        $(`#${postId}`).append('<p>Error al conectar con la API.</p>');
+      });
+    }
+
+    // Llamar a la función al cargar la página
+    $(document).ready(function() {
+      fetchMovieData("Inception", "movie-info-1");
+    });
+  </script>
+</body>
+</html>
