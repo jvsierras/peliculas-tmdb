@@ -44,7 +44,7 @@ function obtenerEnlacePelícula(titulo) {
     // Por ejemplo, puedes usar un objeto con títulos y enlaces predefinidos
     const enlaces = {
         "Título de la Película 1": "https://www.2embed.to/embed/tmdb/movie?id=12345",
-        "Título de la Película 2": "https://abyss.to/movie/12345",
+        "Kraven the Hunter (2024)": "https://short.icu/XdKaWzYnhp",
         "Título de la Película 3": "https://www.terabox.com/embed/12345"
     };
     return enlaces[titulo] || null;
