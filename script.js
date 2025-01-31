@@ -1,6 +1,7 @@
 const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key de TMDb
 const baseUrl = 'https://api.themoviedb.org/3';
 const urlPopular = `${baseUrl}/movie/popular?api_key=${apiKey}&language=es-ES`;
+const urlPopular = `${baseUrl}/movie/top-rated?api_key=${apiKey}&language=es-ES`;
 const urlSearch = `${baseUrl}/search/movie?api_key=${apiKey}&language=es-ES&query=`;
 
 const contenedorPeliculas = document.getElementById('peliculas');
