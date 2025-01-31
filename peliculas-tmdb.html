@@ -1,47 +1,18 @@
-<script>
-  // Función para obtener datos de la película
-  function fetchMovieData(movieTitle, postId) {
-    const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`;
-
-    console.log('URL de la API:', url); // Verifica la URL en la consola
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        const data = JSON.parse(xhr.responseText);
-        console.log('Respuesta de la API:', data); // Verifica la respuesta en la consola
-        if (data.results && data.results.length > 0) {
-          const movie = data.results[0];
-          const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-          const movieInfo = `
-            <div class="movie-info">
-              <img src="${posterUrl}" alt="${movie.title}" style="max-width: 200px;">
-              <h2>${movie.title}</h2>
-              <p><strong>Fecha de lanzamiento:</strong> ${movie.release_date}</p>
-              <p><strong>Resumen:</strong> ${movie.overview}</p>
-              <p><strong>Calificación:</strong> ${movie.vote_average}/10</p>
-            </div>
-          `;
-          document.getElementById(postId).innerHTML = movieInfo;
-        } else {
-          document.getElementById(postId).innerHTML = '<p>No se encontró información de la película.</p>';
-        }
-      } else {
-        console.error('Error al conectar con la API:', xhr.statusText);
-        document.getElementById(postId).innerHTML = '<p>Error al conectar con la API.</p>';
-      }
-    };
-    xhr.onerror = function() {
-      console.error('Error de red al buscar la película.');
-      document.getElementById(postId).innerHTML = '<p>Error de red al buscar la película.</p>';
-    };
-    xhr.send();
-  }
-
-  // Llamar a la función al cargar la página
-  window.onload = function() {
-    fetchMovieData("Inception", "movie-info-1");
-  };
-</script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Películas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Películas Populares</h1>
+    </header>
+    <main>
+        <div id="peliculas"></div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
