@@ -71,7 +71,8 @@ function obtenerEnlacePelícula(titulo) {
     const enlaces = {
         "Título de la Película 1": "https://www.2embed.to/embed/tmdb/movie?id=12345",
         "Kraven the Hunter (2024)": "https://short.icu/XdKaWzYnhp",
-        "CAPITAN AMÉRICA EL PRIMER VENGADOR": "https://1024terabox.com/s/125WIz6lKv_ZjdJKz5LH-5Q"
+        "CAPITAN AMÉRICA EL PRIMER VENGADOR": "https://1024terabox.com/s/125WIz6lKv_ZjdJKz5LH-5Q" ,
+        "Guardianes de la Galaxia: Volumen 3" : "https://multiembed.mov/directstream.php?video_id=tt6791350"
     };
     return enlaces[titulo] || null;
 }
