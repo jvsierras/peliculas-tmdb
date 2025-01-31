@@ -45,7 +45,7 @@ function obtenerEnlacePelícula(titulo) {
     const enlaces = {
         "Título de la Película 1": "https://www.2embed.to/embed/tmdb/movie?id=12345",
         "Kraven the Hunter (2024)": "https://short.icu/XdKaWzYnhp",
-        "Título de la Película 3": "https://www.terabox.com/embed/12345"
+        "CAPITAN AMÉRICA EL PRIMER VENGADOR": "https://1024terabox.com/s/125WIz6lKv_ZjdJKz5LH-5Q"
     };
     return enlaces[titulo] || null;
 }
