@@ -5,6 +5,8 @@ const urlSearch = `${baseUrl}/search/movie?api_key=${apiKey}&language=es-ES&quer
 
 const contenedorPeliculas = document.getElementById('peliculas');
 const searchInput = document.getElementById('search');
+const reproductor = document.getElementById('reproductor');
+const iframeReproductor = document.getElementById('iframeReproductor');
 
 function cargarPeliculas(url) {
     fetch(url)
@@ -18,12 +20,43 @@ function cargarPeliculas(url) {
                     <img src="https://image.tmdb.org/t/p/w500${pelicula.poster_path}" alt="${pelicula.title}">
                     <h3>${pelicula.title}</h3>
                     <p>${pelicula.release_date}</p>
+                    <button onclick="verPelicula('${pelicula.title}')">Ver Película</button>
                 `;
                 contenedorPeliculas.appendChild(divPelicula);
             });
         })
         .catch(error => console.error('Error:', error));
 }
+
+function verPelicula(titulo) {
+    // Aquí puedes buscar el enlace de la película en TeraBox, Abyss.to, 2embed.to, etc.
+    const enlacePelícula = obtenerEnlacePelícula(titulo); // Esta función debe devolver el enlace correcto
+    if (enlacePelícula) {
+        iframeReproductor.src = enlacePelícula;
+        reproductor.style.display = 'flex';
+    } else {
+        alert('Enlace no disponible');
+    }
+}
+
+function obtenerEnlacePelícula(titulo) {
+    // Aquí debes implementar la lógica para obtener el enlace de la película
+    // Por ejemplo, puedes usar un objeto con títulos y enlaces predefinidos
+    const enlaces = {
+        "Título de la Película 1": "https://www.2embed.to/embed/tmdb/movie?id=12345",
+        "Título de la Película 2": "https://abyss.to/movie/12345",
+        "Título de la Película 3": "https://www.terabox.com/embed/12345"
+    };
+    return enlaces[titulo] || null;
+}
+
+// Cerrar el reproductor al hacer clic fuera del iframe
+reproductor.addEventListener('click', (e) => {
+    if (e.target === reproductor) {
+        reproductor.style.display = 'none';
+        iframeReproductor.src = '';
+    }
+});
 
 // Cargar películas populares al inicio
 cargarPeliculas(urlPopular);
