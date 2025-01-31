@@ -13,7 +13,7 @@ const puppeteer = require('puppeteer');
 async function buscarEnlaceAbyss(titulo) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`https://abyss.to/search?q=${encodeURIComponent(titulo)}`);
+    await page.goto(`https://abyss.to/dashboard/manager/search?q=${encodeURIComponent(titulo)}`);
 
     const enlace = await page.evaluate(() => {
         const resultado = document.querySelector('.resultado a');
