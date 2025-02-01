@@ -8,18 +8,9 @@ const contenedorPeliculas = document.getElementById('peliculas');
 const searchInput = document.getElementById('search');
 const reproductor = document.getElementById('reproductor');
 const iframeReproductor = document.getElementById('iframeReproductor');
-
-async function buscarEnlaceAbyss(titulo) {
-    // Esta función debería ser implementada en el servidor si usas Puppeteer
-    console.log("Buscando enlace para:", titulo);
-    return null; // Retorna null o el enlace encontrado
-}
-
-async function buscarEnlacelookmovie(titulo) {
-    // Esta función debería ser implementada en el servidor si usas Puppeteer
-    console.log("Buscando enlace para:", titulo);
-    return null; // Retorna null o el enlace encontrado
-}
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modal-content');
+const closeModal = document.getElementById('close-modal');
 
 function cargarPeliculas(url) {
     fetch(url)
@@ -33,7 +24,7 @@ function cargarPeliculas(url) {
                     <img src="https://image.tmdb.org/t/p/w500${pelicula.poster_path}" alt="${pelicula.title}">
                     <h3>${pelicula.title}</h3>
                     <p>${pelicula.release_date}</p>
-                    <button onclick="verPelicula('${pelicula.title}')">Ver Película</button>
+                    <button onclick="mostrarDetallesPelicula(${pelicula.id})">Ver Detalles</button>
                 `;
                 contenedorPeliculas.appendChild(divPelicula);
             });
@@ -41,33 +32,38 @@ function cargarPeliculas(url) {
         .catch(error => console.error('Error:', error));
 }
 
-async function verPelicula(titulo) {
-    const enlacePelicula = await obtenerEnlacePelícula(titulo); // Esta función debe devolver el enlace correcto
-    if (enlacePelicula) {
-        iframeReproductor.src = enlacePelicula;
-        reproductor.style.display = 'flex';
-    } else {
-        alert('Enlace no disponible');
+async function mostrarDetallesPelicula(id) {
+    const urlDetalles = `${baseUrl}/movie/${id}?api_key=${apiKey}&language=es-ES`;
+    try {
+        const response = await fetch(urlDetalles);
+        const pelicula = await response.json();
+
+        // Mostrar la información en el modal
+        modalContent.innerHTML = `
+            <h2>${pelicula.title}</h2>
+            <img src="https://image.tmdb.org/t/p/w500${pelicula.poster_path}" alt="${pelicula.title}">
+            <p><strong>Fecha de lanzamiento:</strong> ${pelicula.release_date}</p>
+            <p><strong>Duración:</strong> ${pelicula.runtime} minutos</p>
+            <p><strong>Géneros:</strong> ${pelicula.genres.map(genre => genre.name).join(', ')}</p>
+            <p><strong>Sinopsis:</strong> ${pelicula.overview}</p>
+            <p><strong>Puntuación:</strong> ${pelicula.vote_average} / 10</p>
+            <button onclick="verPelicula('${pelicula.title}')">Ver Película</button>
+        `;
+        modal.style.display = 'block'; // Mostrar el modal
+    } catch (error) {
+        console.error('Error al obtener detalles de la película:', error);
     }
 }
 
-async function obtenerEnlacePelícula(titulo) {
-    // Aquí debes implementar la lógica para obtener el enlace de la película
-    // Por ejemplo, puedes usar un objeto con títulos y enlaces predefinidos
-    const enlaces = {
-        "Título de la Película 1": "https://www.2embed.to/embed/tmdb/movie?id=12345",
-        "Kraven the Hunter (2024)": "https://short.icu/XdKaWzYnhp",
-        "CAPITAN AMÉRICA EL PRIMER VENGADOR": "https://1024terabox.com/s/125WIz6lKv_ZjdJKz5LH-5Q",
-        "Guardianes de la Galaxia: Volumen 3": "https://multiembed.mov/directstream.php?video_id=tt6791350"
-    };
-    return enlaces[titulo] || null;
-}
+// Cerrar el modal al hacer clic en la "X"
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
 
-// Cerrar el reproductor al hacer clic fuera del iframe
-reproductor.addEventListener('click', (e) => {
-    if (e.target === reproductor) {
-        reproductor.style.display = 'none';
-        iframeReproductor.src = '';
+// Cerrar el modal al hacer clic fuera del contenido
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
     }
 });
 
