@@ -1,17 +1,17 @@
 const apiKey = '7787dd5dc689453346d1bca794089006'; // Reemplaza con tu API Key de TMDb
 const baseUrl = 'https://api.themoviedb.org/3';
 const urlPopular = `${baseUrl}/movie/popular?api_key=${apiKey}&language=es-ES`;
-const urlTopRated = `${baseUrl}/movie/top-rated?api_key=${apiKey}&language=es-ES`;
 const urlSearch = `${baseUrl}/search/movie?api_key=${apiKey}&language=es-ES&query=`;
 
 const contenedorPeliculas = document.getElementById('peliculas');
 const searchInput = document.getElementById('search');
-const reproductor = document.getElementById('reproductor');
-const iframeReproductor = document.getElementById('iframeReproductor');
 const modal = document.getElementById('modal');
-const modalContent = document.getElementById('modal-content');
 const closeModal = document.getElementById('close-modal');
 
+// Cargar películas populares al inicio
+cargarPeliculas(urlPopular);
+
+// Función para cargar películas
 function cargarPeliculas(url) {
     fetch(url)
         .then(response => response.json())
@@ -32,6 +32,7 @@ function cargarPeliculas(url) {
         .catch(error => console.error('Error:', error));
 }
 
+// Función para mostrar detalles de la película
 async function mostrarDetallesPelicula(id) {
     const urlDetalles = `${baseUrl}/movie/${id}?api_key=${apiKey}&language=es-ES`;
     try {
@@ -39,16 +40,14 @@ async function mostrarDetallesPelicula(id) {
         const pelicula = await response.json();
 
         // Mostrar la información en el modal
-        modalContent.innerHTML = `
-            <h2>${pelicula.title}</h2>
-            <img src="https://image.tmdb.org/t/p/w500${pelicula.poster_path}" alt="${pelicula.title}">
-            <p><strong>Fecha de lanzamiento:</strong> ${pelicula.release_date}</p>
-            <p><strong>Duración:</strong> ${pelicula.runtime} minutos</p>
-            <p><strong>Géneros:</strong> ${pelicula.genres.map(genre => genre.name).join(', ')}</p>
-            <p><strong>Sinopsis:</strong> ${pelicula.overview}</p>
-            <p><strong>Puntuación:</strong> ${pelicula.vote_average} / 10</p>
-            <button onclick="verPelicula('${pelicula.title}')">Ver Película</button>
-        `;
+        document.getElementById('modal-title').textContent = pelicula.title;
+        document.getElementById('modal-poster').src = `https://image.tmdb.org/t/p/w500${pelicula.poster_path}`;
+        document.getElementById('modal-release-date').textContent = pelicula.release_date;
+        document.getElementById('modal-runtime').textContent = pelicula.runtime;
+        document.getElementById('modal-genres').textContent = pelicula.genres.map(genre => genre.name).join(', ');
+        document.getElementById('modal-overview').textContent = pelicula.overview;
+        document.getElementById('modal-vote-average').textContent = pelicula.vote_average;
+
         modal.style.display = 'block'; // Mostrar el modal
     } catch (error) {
         console.error('Error al obtener detalles de la película:', error);
@@ -66,9 +65,6 @@ window.addEventListener('click', (e) => {
         modal.style.display = 'none';
     }
 });
-
-// Cargar películas populares al inicio
-cargarPeliculas(urlPopular);
 
 // Implementar búsqueda
 searchInput.addEventListener('input', (e) => {
