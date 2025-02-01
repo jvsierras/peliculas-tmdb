@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Películas</title>
+    <title>Películas Populares</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,12 +11,26 @@
         <h1>Películas Populares</h1>
         <input type="text" id="search" placeholder="Buscar películas...">
     </header>
+
     <main>
-        <div id="peliculas"></div>
-        <div id="reproductor" class="reproductor">
-            <iframe id="iframeReproductor" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
+        <div id="peliculas" class="peliculas-container"></div>
     </main>
+
+    <!-- Modal para detalles de la película -->
+    <div id="modal" class="modal">
+        <div id="modal-content" class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-poster" src="" alt="Poster de la película">
+            <p><strong>Fecha de lanzamiento:</strong> <span id="modal-release-date"></span></p>
+            <p><strong>Duración:</strong> <span id="modal-runtime"></span> minutos</p>
+            <p><strong>Géneros:</strong> <span id="modal-genres"></span></p>
+            <p><strong>Sinopsis:</strong> <span id="modal-overview"></span></p>
+            <p><strong>Puntuación:</strong> <span id="modal-vote-average"></span> / 10</p>
+            <button id="ver-pelicula">Ver Película</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
