@@ -34,6 +34,31 @@ buscarEnlaceAbyss("Avengers: Endgame").then(enlace => {
     }
 });
 
+const puppeteer = require('puppeteer');
+
+async function buscarEnlacelookmovie(titulo) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(`https://lookmovie.skin//search?q=${encodeURIComponent(titulo)}`);
+
+    const enlace = await page.evaluate(() => {
+        const resultado = document.querySelector('.resultado a');
+        return resultado ? resultado.href : null;
+    });
+
+    await browser.close();
+    return enlace;
+}
+
+// Ejemplo de uso
+buscarEnlacelookmovie("Avengers: Endgame").then(enlace => {
+    if (enlace) {
+        console.log("Enlace encontrado:", enlace);
+    } else {
+        console.log("Enlace no disponible.");
+    }
+});
+
 
 function cargarPeliculas(url) {
     fetch(url)
